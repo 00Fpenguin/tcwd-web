@@ -1,0 +1,163 @@
+version: '3'
+
+networks:
+  eth0:
+
+volumes:
+  database:
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: "./docker/nginx/Dockerfile"
+      args:
+        - ENVIRONMENT=${ENVIRONMENT}
+        - API_DOMAIN=${API_DOMAIN}
+        - APP_DOMAIN=${APP_DOMAIN}
+    image: ${PROJECT_NAME}_nginx:${ENVIRONMENT}
+    container_name: ${PROJECT_NAME}_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      TZ: ${TIMEZONE}
+      API_DOMAIN: ${API_DOMAIN}
+      APP_DOMAIN: ${APP_DOMAIN}
+    depends_on:
+      - node
+      - mysql
+      - php
+    volumes:
+      - ./api:/var/www/api
+      - ./frontend:/var/www/frontend
+    networks:
+      - eth0
+
+  php:
+    build:
+      context: .
+      dockerfile: "./docker/php/Dockerfile"
+      args:
+        - OPCACHE_VALIDATE_TIMESTAMPS=${OPCACHE_VALIDATE_TIMESTAMPS}
+        - ENABLE_XDEBUG=${ENABLE_XDEBUG}
+    image: ${PROJECT_NAME}_php:${ENVIRONMENT}
+    container_name: ${PROJECT_NAME}_php
+    volumes:
+      - ./api:/var/www/api
+    working_dir: /var/www/api
+    depends_on:
+      - mysql
+    ports:
+      - "9000:9000"
+    environment:
+      TZ: ${TIMEZONE}
+      XDEBUG_CONFIG: "remote_host=10.0.2.2"
+    networks:
+      - eth0
+
+  mysql:
+    build:
+      context: .
+      dockerfile: "./docker/mysql/Dockerfile"
+    image: ${PROJECT_NAME}_mysql:${ENVIRONMENT}
+    command:
+      [
+        "--character-set-server=utf8",
+        "--collation-server=utf8_unicode_ci",
+        "--default-authentication-plugin=mysql_native_password",
+      ]
+    container_name: ${PROJECT_NAME}_mysql
+    ports:
+      - "3306:3306"
+    tty: true
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: ${TIMEZONE}
+    volumes:
+      - ./docker/mysql/scripts:/docker-entrypoint-initdb.d
+      - database:/var/lib/mysql
+    networks:
+      - eth0
+
+  node:
+    build:
+      context: .
+      dockerfile: "./docker/node/${ENVIRONMENT}.Dockerfile"
+    image: ${PROJECT_NAME}_node:${ENVIRONMENT}
+    container_name: ${PROJECT_NAME}_node
+    volumes:
+      - ./frontend:/var/www/frontend
+    working_dir: /var/www/frontend
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - "3000:3000"
+    networks:
+      - eth0
+
+  composer:
+    build:
+      context: .
+      dockerfile: ./docker/composer/Dockerfile
+    container_name: composer
+    volumes:
+      - ./api:/var/www/api
+    working_dir: /var/www/api
+    depends_on:
+      - php
+    networks:
+      - eth0
+
+  # yarn:
+  #   image: node:14.15.0-alpine3.12
+  #   container_name: npm
+  #   volumes:
+  #     - ./frontend:/var/www/frontend
+  #   working_dir: /var/www/frontend
+  #   entrypoint: ['npm']
+  #   depends_on:
+  #     - node
+
+  # artisan:
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/php/Dockerfile
+  #   container_name: artisan
+  #   volumes:
+  #     - ./api:/var/www/api
+  #   depends_on:
+  #     - php
+  #   working_dir: /var/www/api
+  #   entrypoint: ['php', '/var/www/api/artisan']
+  #   depends_on:
+  #     - php
+  #   networks:
+  #     - eth0
+    
+  # cron:
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/cron/Dockerfile
+  #   container_name: cron
+  #   volumes:
+  #     - ./api:/var/www/api
+  #   working_dir: /var/www/api
+  #   depends_on:
+  #     - mysql
+
+  # data:
+  #   build:
+  #     context: .
+  #     dockerfile: "./docker/data/Dockerfile"
+  #     image: ${PROJECT_NAME}_data:${ENVIRONMENT}
+  #   container_name: ${PROJECT_NAME}_data
+  #   volumes:
+  #     - ./api:/var/www/api
+  #     - ./frontend:/var/www/frontend
+  #   environment:
+  #     TZ: ${TIMEZONE}
