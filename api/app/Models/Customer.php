@@ -7,9 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
+    use HasFactory;
 
     protected $fillable = [
+        'first_name',
+        'last_name',
+        'middle_name',
         'account_number',
+        'account_name',
         'user_count',
         'type_of_water_service',
         'block_number',
@@ -19,7 +24,6 @@ class Customer extends Model
         'nearest_neighbor',
         'is_active',
         'birth_date',
-        'account_name',
         'contact_number',
         'civil_status',
         'gender',
@@ -30,5 +34,10 @@ class Customer extends Model
     public function user()
     {
         return $this->morphOne(User::class, 'typeable');
+    }
+
+    public function meters()
+    {
+        return $this->belongsToMany(Meter::class, 'customer_meters');
     }
 }

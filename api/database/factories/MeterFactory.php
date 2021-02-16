@@ -1,0 +1,30 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\Meter;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class MeterFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Meter::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'location' => $this->faker->address,
+            'manufacturer' => $this->faker->randomElement(['GoalStar', 'E-jet', 'Asashi', 'Woltman', 'Fishtank']),
+            'type' => rand(1, 4),
+        ];
+    }
+}

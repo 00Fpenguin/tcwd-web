@@ -6,10 +6,21 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
+
+    const MALE = 1;
+    const FEMALE = 2;
+
+    const SINGLE = 1;
+    const MARRIED = 2;
+    const WIDOWED = 3;
+
+    const ACTIVE = true;
+    const INACTIVE = false;
 
     /**
      * The attributes that are mass assignable.
@@ -17,9 +28,14 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
-        'email',
+        'username',
+        'first_name',
+        'last_name',
+        'middle_name',
+        'profile_picture',
         'password',
+        'typeable_id',
+        'typeable_type'
     ];
 
     /**
@@ -29,15 +45,12 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
+        'created_at',
+        'updated_at',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function typeable()
+    {
+        return $this->morphTo();
+    }
 }

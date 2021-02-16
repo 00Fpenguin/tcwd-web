@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBillingsTable extends Migration
+class CreateMeterReadings extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateBillingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('billings', function (Blueprint $table) {
+        Schema::create('meter_readings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id');
-            $table->double('amount');
-            $table->integer('vat');
-            $table->date('due_date');
+            $table->foreignId('customer_meter_id');
+            $table->foreignId('employee_id');
+            $table->dateTime('date_of_reading');
+            $table->double('reading_value');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateBillingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('billings');
+        Schema::dropIfExists('meter_readings');
     }
 }

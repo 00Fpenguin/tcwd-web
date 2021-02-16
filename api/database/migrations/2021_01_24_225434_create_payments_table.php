@@ -15,17 +15,17 @@ class CreatePaymentsTable extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('reference_number');
-            $table->double('fee');
-            $table->double('amount_paid');
+            $table->foreignId('billing_id');
+            $table->integer('status'); // 1 or 2
+            $table->integer('type_code'); // 1 or 2
+            $table->dateTime('date_of_payment');
+            $table->double('amount_of_payment');
 
             $table->foreignId('payment_method_id');
-            $table->foreignId('customer_id');
 
             $table->timestamps();
 
             $table->foreign('payment_method_id')->references('id')->on('payment_methods');
-            $table->foreign('customer_id')->references('id')->on('customers');
         });
     }
 

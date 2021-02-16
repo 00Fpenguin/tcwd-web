@@ -16,7 +16,9 @@ class CreateEmployeesTable extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->string('username');
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('middle_name')->nullable();
             $table->date('employment_date');
             $table->boolean('is_validated')->default(FALSE);
             $table->boolean('is_active')->default(User::INACTIVE);
@@ -27,6 +29,7 @@ class CreateEmployeesTable extends Migration
             $table->enum('gender', [User::MALE, User::FEMALE]);
             $table->string('spouse_name')->nullable();
             $table->enum('ownership_details', [1, 2])->nullable(); // owned, unowned
+            $table->boolean('is_admin', \App\Models\Employee::REGULAR);
             $table->timestamps();
 
             $table->foreignId('occupation_id')->nullable();

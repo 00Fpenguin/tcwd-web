@@ -1,13 +1,18 @@
+/* eslint-disable arrow-parens */
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   Box,
+  Button,
   Drawer,
   Hidden,
   List,
   makeStyles
 } from '@material-ui/core';
+
+import { AppContext } from 'src/AppProvider';
+
 import {
   AlertCircle as AlertCircleIcon,
   BarChart as BarChartIcon,
@@ -16,7 +21,8 @@ import {
   ShoppingBag as ShoppingBagIcon,
   User as UserIcon,
   UserPlus as UserPlusIcon,
-  Users as UsersIcon
+  Users as UsersIcon,
+  LogOut as LogoutIcon
 } from 'react-feather';
 import NavItem from './NavItem';
 
@@ -60,7 +66,8 @@ const items = [
     href: '/tickets',
     icon: AlertCircleIcon,
     title: 'Tickets'
-  }, {
+  },
+  {
     href: '/announcements',
     icon: AlertCircleIcon,
     title: 'Announcements'
@@ -96,6 +103,7 @@ const useStyles = makeStyles(() => ({
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
+  const { logout } = React.useContext(AppContext);
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -105,14 +113,10 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   }, [location.pathname]);
 
   const content = (
-    <Box
-      height="100%"
-      display="flex"
-      flexDirection="column"
-    >
+    <Box height="100%" display="flex" flexDirection="column">
       <Box p={2}>
         <List>
-          {items.map((item) => (
+          {items.map(item => (
             <NavItem
               href={item.href}
               key={item.title}
@@ -123,13 +127,12 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         </List>
       </Box>
       <Box flexGrow={1} />
-      <Box>
+      <Box px={2}>
         <List>
-          <NavItem
-            href="/logout"
-            title="Logout"
-            icon={SettingsIcon}
-          />
+          <Button type="button" onClick={logout}>
+            <LogoutIcon />
+            &nbsp; Logout
+          </Button>
         </List>
       </Box>
     </Box>

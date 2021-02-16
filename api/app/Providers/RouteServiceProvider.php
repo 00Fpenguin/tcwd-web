@@ -10,23 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    /**
-     * The path to the "home" route for your application.
-     *
-     * This is used by Laravel authentication to redirect users after login.
-     *
-     * @var string
-     */
-    public const HOME = '/home';
-
-    /**
-     * The controller namespace for the application.
-     *
-     * When present, controller route declarations will automatically be prefixed with this namespace.
-     *
-     * @var string|null
-     */
-    // protected $namespace = 'App\\Http\\Controllers';
+    protected $apiNamespace ='App\Http\Controllers\API';
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -38,14 +22,14 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            Route::prefix('api')
-                ->middleware('api')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/api.php'));
+            // v1 api routes
+            $this->initializeAPIRoutes("v1");
 
-            Route::middleware('web')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/web.php'));
+            // v2 api routes
+            // $this->initializeAPIRoutes("v2");
+
+            // web routes
+            $this->initializeWebRoutes();
         });
     }
 
@@ -59,5 +43,32 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
         });
+    }
+
+    /**
+     * Setting up api routes by specifying its version
+     *
+     * @param $version
+     * @return void
+     */
+    protected function initializeAPIRoutes($version)
+    {
+        Route::prefix('api')
+            ->middleware(['accept_json', 'api', 'api_version:' . $version])
+            ->namespace("{$this->apiNamespace}\\{$version}")
+            ->prefix($version)
+            ->group(base_path("routes/api/{$version}.php"));
+    }
+
+    /**
+     * Setting up web routes
+     *
+     * @return void
+     */
+    protected function initializeWebRoutes()
+    {
+        Route::middleware('web')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/web.php'));
     }
 }

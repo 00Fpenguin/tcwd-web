@@ -1,9 +1,11 @@
+/* eslint-disable arrow-parens */
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
-import TopBar from './TopBar';
+// import TopBar from './TopBar';
+import { AppContext } from 'src/AppProvider';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.default,
     display: 'flex',
@@ -14,8 +16,8 @@ const useStyles = makeStyles((theme) => ({
   wrapper: {
     display: 'flex',
     flex: '1 1 auto',
-    overflow: 'hidden',
-    paddingTop: 64
+    overflow: 'hidden'
+    // paddingTop: 64
   },
   contentContainer: {
     display: 'flex',
@@ -31,10 +33,16 @@ const useStyles = makeStyles((theme) => ({
 
 const MainLayout = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
+  const { token } = React.useContext(AppContext);
+
+  if (token) {
+    navigate('/?authenticated=1', { replace: true });
+  }
 
   return (
     <div className={classes.root}>
-      <TopBar />
+      {/* <TopBar /> */}
       <div className={classes.wrapper}>
         <div className={classes.contentContainer}>
           <div className={classes.content}>

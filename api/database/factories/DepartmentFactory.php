@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Department;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Collection;
 
 class DepartmentFactory extends Factory
 {

@@ -2,25 +2,22 @@ import React from 'react';
 import {
   Container,
   Grid,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
+
 import Page from 'src/components/Page';
-import Budget from './Budget';
-import LatestOrders from './LatestOrders';
-import LatestProducts from './LatestProducts';
 import Sales from './Sales';
-import TasksProgress from './TasksProgress';
-import TotalCustomers from './TotalCustomers';
-import TotalProfit from './TotalProfit';
-import TrafficByDevice from './TrafficByDevice';
+import Progress from './Progress';
+import Statistics from './Statistic';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3)
-  }
+    paddingTop: theme.spacing(3),
+    flexGrow: 1,
+  },
 }));
 
 const Dashboard = () => {
@@ -32,50 +29,16 @@ const Dashboard = () => {
       title="Dashboard"
     >
       <Container maxWidth={false}>
+        <Page.Header title="Accounts Overview" />
+        <Statistics />
         <Grid
           container
-          spacing={3}
+          spacing={2}
         >
           <Grid
             item
-            lg={3}
-            sm={6}
-            xl={3}
-            xs={12}
-          >
-            <Budget />
-          </Grid>
-          <Grid
-            item
-            lg={3}
-            sm={6}
-            xl={3}
-            xs={12}
-          >
-            <TotalCustomers />
-          </Grid>
-          <Grid
-            item
-            lg={3}
-            sm={6}
-            xl={3}
-            xs={12}
-          >
-            <TasksProgress />
-          </Grid>
-          <Grid
-            item
-            lg={3}
-            sm={6}
-            xl={3}
-            xs={12}
-          >
-            <TotalProfit />
-          </Grid>
-          <Grid
-            item
-            lg={8}
-            md={12}
+            lg={7}
+            md={10}
             xl={9}
             xs={12}
           >
@@ -83,30 +46,14 @@ const Dashboard = () => {
           </Grid>
           <Grid
             item
-            lg={4}
-            md={6}
+            lg={5}
+            md={8}
             xl={3}
             xs={12}
           >
-            <TrafficByDevice />
-          </Grid>
-          <Grid
-            item
-            lg={4}
-            md={6}
-            xl={3}
-            xs={12}
-          >
-            <LatestProducts />
-          </Grid>
-          <Grid
-            item
-            lg={8}
-            md={12}
-            xl={9}
-            xs={12}
-          >
-            <LatestOrders />
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <Progress />
+            </div>
           </Grid>
         </Grid>
       </Container>

@@ -1,11 +1,14 @@
+/* eslint-disable arrow-parens */
 import React, { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
 
+import { AppContext } from 'src/AppProvider';
+
 import NavBar from './NavBar';
 import TopBar from './TopBar';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
     display: 'flex',
@@ -37,10 +40,13 @@ const useStyles = makeStyles((theme) => ({
 const DashboardLayout = () => {
   const classes = useStyles();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
+  const { token } = React.useContext(AppContext);
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    navigate('login', { replace: true });
+    if (!token) {
+      navigate('login?rdr=1', { replace: true });
+    }
   }, []);
 
   return (

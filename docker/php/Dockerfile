@@ -1,6 +1,5 @@
-FROM php:7.3-fpm
-RUN apt-get update
-RUN apt-get install -y libzip-dev vim
+FROM php:7.4-fpm
+RUN apt-get update && apt-get install libzip-dev -y
 RUN docker-php-ext-install zip
 RUN docker-php-ext-install mysqli
 RUN docker-php-ext-install pdo_mysql

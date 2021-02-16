@@ -1,6 +1,10 @@
 <?php
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use Luigel\Paymongo\Facades\Paymongo;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +17,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/checkout', function () {
+    Log::info('CHECKOUT');
+    Log::info(request()->all());
+    if (request()->query('success') == 1) {
+        return redirect()->away('app://tcwd/bill/success');
+    }
+    return redirect()->away('app://tcwd/bill/failed');
+})->name('checkout');

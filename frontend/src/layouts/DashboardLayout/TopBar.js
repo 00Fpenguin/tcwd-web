@@ -12,15 +12,23 @@ import {
   makeStyles
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
-import InputIcon from '@material-ui/icons/Input';
+// import InputIcon from '@material-ui/icons/Input';
 import Logo from 'src/components/Logo';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
 
 const useStyles = makeStyles(() => ({
-  root: {},
+  root: {
+    background: 'white',
+  },
   avatar: {
     width: 60,
     height: 60
+  },
+  menu: {
+    marginTop: '3em',
   }
 }));
 
@@ -31,20 +39,30 @@ const TopBar = ({
 }) => {
   const classes = useStyles();
   const [notifications] = useState([]);
-  console.log(className);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <AppBar
       className={clsx(classes.root, className)}
-      elevation={0}
+      elevation={1}
       {...rest}
     >
       <Toolbar>
         <RouterLink to="/">
-          <Logo />
+          <Logo width={40} />
         </RouterLink>
         <Box flexGrow={1} />
         <Hidden mdDown>
-          <IconButton color="inherit">
+          <IconButton color="primary">
             <Badge
               badgeContent={notifications.length}
               color="primary"
@@ -53,13 +71,38 @@ const TopBar = ({
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <IconButton color="inherit">
-            <InputIcon />
+          <IconButton
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleMenu}
+            color="primary"
+          >
+            <AccountCircle />
           </IconButton>
+          <Menu
+            id="menu-appbar"
+            className={classes.menu}
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={open}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem onClick={handleClose}>My account</MenuItem>
+          </Menu>
         </Hidden>
         <Hidden lgUp>
           <IconButton
-            color="inherit"
+            color="primary"
             onClick={onMobileNavOpen}
           >
             <MenuIcon />

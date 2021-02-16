@@ -2,7 +2,6 @@ import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import {
-  Avatar,
   Box,
   Card,
   CardContent,
@@ -12,7 +11,8 @@ import {
   makeStyles
 } from '@material-ui/core';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import PeopleIcon from '@material-ui/icons/PeopleOutlined';
+// import PeopleIcon from '@material-ui/icons/PeopleOutlined';
+import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,26 +45,19 @@ const TotalCustomers = ({ className, ...rest }) => {
           container
           justify="space-between"
           spacing={3}
+          style={{ padding: '1em' }}
         >
+          {/* <Paper className={classes.paper}>xs=12</Paper> */}
+          <Grid item elevation={1} style={{ border: '1px solid #aaa', borderRadius: 5, }}>
+            <ShoppingBasket />
+          </Grid>
           <Grid item>
-            <Typography
-              color="textSecondary"
-              gutterBottom
-              variant="h6"
-            >
-              TOTAL CUSTOMERS
-            </Typography>
             <Typography
               color="textPrimary"
               variant="h3"
             >
               1,600
             </Typography>
-          </Grid>
-          <Grid item>
-            <Avatar className={classes.avatar}>
-              <PeopleIcon />
-            </Avatar>
           </Grid>
         </Grid>
         <Box
@@ -77,13 +70,14 @@ const TotalCustomers = ({ className, ...rest }) => {
             className={classes.differenceValue}
             variant="body2"
           >
-            16%
+            PHP 42,320.00
           </Typography>
           <Typography
             color="textSecondary"
-            variant="caption"
+            gutterBottom
+            variant="h6"
           >
-            Since last month
+            TOTAL SALES
           </Typography>
         </Box>
       </CardContent>

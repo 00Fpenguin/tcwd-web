@@ -2,31 +2,40 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import DashboardLayout from 'src/layouts/DashboardLayout';
 import MainLayout from 'src/layouts/MainLayout';
-import AccountView from 'src/views/account/AccountView';
-import CustomerListView from 'src/views/customer/CustomerListView';
+import AccountView from 'src/views/account';
+import AccountDetailView from 'src/views/account/Detail';
+import ComplaintsView from 'src/views/complaints';
 import DashboardView from 'src/views/reports/DashboardView';
 import LoginView from 'src/views/auth/LoginView';
 import NotFoundView from 'src/views/errors/NotFoundView';
-import ProductListView from 'src/views/product/ProductListView';
 import RegisterView from 'src/views/auth/RegisterView';
+import HomeView from 'src/views/home';
+import PaymentView from 'src/views/payments';
+import FormView from 'src/views/forms';
+import JobView from 'src/views/jobs';
+import TicketsView from 'src/views/tickets';
+import AnnouncementView from 'src/views/announcements';
+import FaqView from 'src/views/faqs';
+import ReportView from 'src/views/report';
 
 const routes = [
   {
     path: '/',
     element: <DashboardLayout />,
     children: [
-      { path: '', element: <AccountView /> },
-      { path: 'home', element: <AccountView /> },
-      { path: 'dashboard', element: <AccountView /> },
+      { path: '', element: <HomeView /> },
+      { path: 'home', element: <HomeView /> },
+      { path: 'dashboard', element: <DashboardView /> },
       { path: 'accounts', element: <AccountView /> },
-      { path: 'payments', element: <CustomerListView /> },
-      { path: 'complaints', element: <CustomerListView /> },
-      { path: 'forms', element: <DashboardView /> },
-      { path: 'jobs', element: <DashboardView /> },
-      { path: 'tickets', element: <ProductListView /> },
-      { path: 'announcements', element: <ProductListView /> },
-      { path: 'faqs', element: <ProductListView /> },
-      { path: 'reports', element: <ProductListView /> },
+      { path: 'accounts/:id', element: <AccountDetailView /> },
+      { path: 'payments', element: <PaymentView /> },
+      { path: 'complaints', element: <ComplaintsView /> },
+      { path: 'forms', element: <FormView /> },
+      { path: 'jobs', element: <JobView /> },
+      { path: 'tickets', element: <TicketsView /> },
+      { path: 'announcements', element: <AnnouncementView /> },
+      { path: 'faqs', element: <FaqView /> },
+      { path: 'reports', element: <ReportView /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
