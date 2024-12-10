@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 networks:
   eth0:
@@ -18,7 +18,7 @@ services:
     image: ${PROJECT_NAME}_nginx:${ENVIRONMENT}
     container_name: ${PROJECT_NAME}_nginx
     ports:
-      - "80:80"
+      - "81:80"
       - "443:443"
     environment:
       TZ: ${TIMEZONE}
@@ -104,13 +104,11 @@ services:
   composer:
     build:
       context: .
-      dockerfile: ./docker/composer/Dockerfile
+      dockerfile: ./docker/php/Dockerfile
     container_name: composer
     volumes:
       - ./api:/var/www/api
     working_dir: /var/www/api
-    depends_on:
-      - php
     networks:
       - eth0
 

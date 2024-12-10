@@ -140,7 +140,6 @@ const LoginView = () => {
                     name="email"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    type="email"
                     value={values.email}
                     variant="outlined"
                     inputProps={{

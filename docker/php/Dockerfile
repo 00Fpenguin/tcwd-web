@@ -8,6 +8,11 @@ RUN pecl install redis \
 RUN printf '[PHP]\ndate.timezone = "Asia/Manila"\n' > /usr/local/etc/php/conf.d/tzone.ini
 COPY ./docker/php/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
 
+# Install composer
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+RUN php composer-setup.php --install-dir=/usr/bin --filename=composer
+RUN php -r "unlink('composer-setup.php');"
+
 # Setup xDebug
 ARG ENABLE_XDEBUG
 COPY ./docker/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
